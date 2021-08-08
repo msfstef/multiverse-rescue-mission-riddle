@@ -1,0 +1,53 @@
+body {
+  background: rgb(255, 241, 235);
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+}
+
+
+h1 { 
+  text-align: center;
+  margin: auto;
+  font-family: Tahoma;
+  background: rgba(255, 255, 255, 0.459);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+}
+
+#controls {
+  position: absolute;
+}
+
+#view {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.scientist {
+  --margin: 4px;
+  width: calc(20vw - 2 * var(--margin));
+  height: calc(20vw - 2 * var(--margin));
+  margin: var(--margin);
+  background: rgb(206, 255, 249);
+}
+
+.accountant {
+  background: rgb(242, 255, 171);
+}
+
+.robot {
+  width: 10vw;
+  height: 10vw;
+  background: rgb(224, 224, 224);
+  
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.robot.terminated {
+  background:rgb(255, 125, 125)
+}

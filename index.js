@@ -18,14 +18,14 @@ window.onload = () => {
       new Accountant(scientistElem, NUM_SCIENTISTS) :
       new Scientist(scientistElem);
     
-    view.appendChild(scientistElem);
+    view.appendChild(scientist.element);
     scientists.push(scientist);
   }
 
   // add the robot that will visit the scientists
   const robotElem = document.createElement('div');
   const robot = new Robot(robotElem, NUM_SCIENTISTS);
-  view.appendChild(robotElem);
+  view.appendChild(robot.element);
 
   while (!robot.terminated) {
     robot.visitDimension();
@@ -47,12 +47,20 @@ function leversToSignal (leftLever, rightLever) {
 class Robot {
   constructor(element, numDimensions) {
     element.classList.add('robot');
-    this.elem_ = element;
+    this.element = element;
     this.numDimensions_ = numDimensions;
     this.dimension = null;
     this.leftLever = LEVER_POSITION_A;
-    this.rightLever = LEVER_POSITION_B;
+    this.rightLever = LEVER_POSITION_A;
     this.terminated = false;
+
+
+    this.leftLeverElement = document.createElement('div');
+    this.leftLeverElement.innerText = this.leftLever;
+    this.element.appendChild(this.leftLeverElement);
+    this.rightLeverElement = document.createElement('div');
+    this.rightLeverElement.innerText = this.rightLever;
+    this.element.appendChild(this.rightLeverElement);
   }
 
   visitDimension() {
@@ -66,6 +74,7 @@ class Robot {
     } else {
       this.rightLever = LEVER_POSITION_A;
     }
+    this.rightLeverElement.innerText = this.rightLever;
   }
 
   pullLeftLever() {
@@ -74,10 +83,12 @@ class Robot {
     } else {
       this.leftLever = LEVER_POSITION_A;
     }
+    this.leftLeverElement.innerText = this.leftLever;
   }
 
   pressButton() {
     this.terminated = true;
+    this.element.classList.add('terminated')
   }
 }
 
@@ -86,7 +97,7 @@ class Robot {
 class Scientist {
   constructor(element) {
     element.classList.add('scientist');
-    this.elem_ = element;
+    this.element = element;
     this.sentVisitedSignal_ = false;
   }
 
