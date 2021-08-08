@@ -39,9 +39,18 @@ h1 {
   background: rgb(206, 255, 249);
 }
 
+.scientist.visited {
+  background: rgb(205, 253, 233);
+}
+
 .accountant {
   background: rgb(242, 255, 171);
 }
+
+.accountant.visited {
+  background: rgb(205, 253, 221);
+}
+
 
 .robot {
   width: 10vw;
