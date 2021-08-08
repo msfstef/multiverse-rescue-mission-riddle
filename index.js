@@ -3,7 +3,7 @@ const LEVER_POSITION_B = 'B';
 const SIGNAL_A = '0';
 const SIGNAL_B = '1';
 
-window.onload = () => {
+window.onload = async () => {
   const view = document.getElementById('view');
   const commands = document.getElementById('commands');
   const options = document.getElementById('options');
@@ -25,14 +25,24 @@ window.onload = () => {
   // add the robot that will visit the scientists
   const robotElem = document.createElement('div');
   const robot = new Robot(robotElem, NUM_SCIENTISTS);
-  view.appendChild(robot.element);
 
   while (!robot.terminated) {
     robot.visitDimension();
     const scientist = scientists[robot.dimension];
-    scientist.handleVisit(robot);    
+    scientist.element.appendChild(robot.element);
+    await wait();
+    scientist.handleVisit(robot);
+    await wait();
+    scientist.element.removeChild(robot.element);
   }
+
+  view.appendChild(robot.element);
+  view.classList.add('terminated');
 };
+
+function wait (timeInMs = 100) {
+  return new Promise(res => setTimeout(res, timeInMs));
+}
 
 
 function pickRandomNumberInRange(range) {
@@ -102,6 +112,7 @@ class Scientist {
   }
 
   handleVisit(robot) {
+    this.element.classList.add('visited');
     const signal = leversToSignal(robot.leftLever, robot.rightLever);
     switch (signal) {
       case SIGNAL_A:
@@ -133,6 +144,7 @@ class Accountant extends Scientist {
   }
 
   handleVisit(robot) {
+    this.element.classList.add('visited');
     const signal = leversToSignal(robot.leftLever, robot.rightLever);
     switch (signal) {
       case SIGNAL_A:

@@ -51,3 +51,11 @@ h1 {
 .robot.terminated {
   background:rgb(255, 125, 125)
 }
+
+#view.terminated .scientist {
+  background: rgb(255, 69, 69);
+}
+
+#view.terminated .scientist.visited {
+  background: rgb(60, 211, 0);
+}
