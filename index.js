@@ -3,13 +3,30 @@ const LEVER_POSITION_B = 'B';
 const SIGNAL_A = '0';
 const SIGNAL_B = '1';
 
+let NUM_SCIENTISTS = 11;
+let TIMESTEP = 500;
+
 window.onload = async () => {
-  const view = document.getElementById('view');
   const commands = document.getElementById('commands');
   const options = document.getElementById('options');
+  updateOptions();
+  options.addEventListener('change', (e) => {
+    updateOptions();
+    resetRiddle();
+    runRiddle();
+  })
 
-  const NUM_SCIENTISTS = 11;
+  runRiddle();
+};
 
+function updateOptions() {
+  const options = document.getElementById('options');
+  NUM_SCIENTISTS = options.querySelector('[name="numScientists"]').valueAsNumber;
+  TIMESTEP = options.querySelector('[name="timestep"]').valueAsNumber;
+}
+
+async function runRiddle() {
+  const view = document.getElementById('view');
   const scientists = [];
   const accountantIdx = pickRandomNumberInRange(NUM_SCIENTISTS);
   for (let i = 0; i < NUM_SCIENTISTS; i++) {
@@ -30,17 +47,27 @@ window.onload = async () => {
     robot.visitDimension();
     const scientist = scientists[robot.dimension];
     scientist.element.appendChild(robot.element);
-    await wait();
+    await wait(TIMESTEP);
     scientist.handleVisit(robot);
-    await wait();
+    await wait(TIMESTEP);
     scientist.element.removeChild(robot.element);
   }
 
   view.appendChild(robot.element);
   view.classList.add('terminated');
-};
+}
 
-function wait (timeInMs = 100) {
+function resetRiddle() {
+  const main = document.getElementById('main')
+  const view = document.getElementById('view');
+  main.removeChild(view);
+
+  const newView = document.createElement('div');
+  newView.id = 'view';
+  main.appendChild(newView);
+}
+
+function wait (timeInMs = 200) {
   return new Promise(res => setTimeout(res, timeInMs));
 }
 
@@ -66,9 +93,11 @@ class Robot {
 
 
     this.leftLeverElement = document.createElement('div');
+    this.leftLeverElement.classList.add('lever', this.leftLever);
     this.leftLeverElement.innerText = this.leftLever;
     this.element.appendChild(this.leftLeverElement);
     this.rightLeverElement = document.createElement('div');
+    this.rightLeverElement.classList.add('lever', this.rightLever);
     this.rightLeverElement.innerText = this.rightLever;
     this.element.appendChild(this.rightLeverElement);
   }
@@ -79,21 +108,25 @@ class Robot {
   }
 
   pullRightLever() {
+    this.rightLeverElement.classList.remove(this.rightLever)
     if (this.rightLever === LEVER_POSITION_A) {
       this.rightLever = LEVER_POSITION_B;
     } else {
       this.rightLever = LEVER_POSITION_A;
     }
     this.rightLeverElement.innerText = this.rightLever;
+    this.rightLeverElement.classList.add(this.rightLever)
   }
 
   pullLeftLever() {
+    this.leftLeverElement.classList.remove(this.leftLever)
     if (this.leftLever === LEVER_POSITION_A) {
       this.leftLever = LEVER_POSITION_B;
     } else {
       this.leftLever = LEVER_POSITION_A;
     }
     this.leftLeverElement.innerText = this.leftLever;
+    this.leftLeverElement.classList.add(this.leftLever)
   }
 
   pressButton() {

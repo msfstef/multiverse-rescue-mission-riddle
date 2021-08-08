@@ -1,8 +1,6 @@
 body {
   background: rgb(255, 241, 235);
-  height: 100vh;
   margin: 0;
-  overflow: hidden;
 }
 
 
@@ -16,7 +14,15 @@ h1 {
 }
 
 #controls {
-  position: absolute;
+  height: 60px;
+  margin: 0 12px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+#options {
+
 }
 
 #view {
@@ -46,6 +52,21 @@ h1 {
   flex-direction: row;
   align-items: center;
   justify-content: space-evenly;
+}
+
+.lever {
+  background: rgb(240, 240, 240);
+  padding: 0 4px;
+}
+
+.lever.A {
+  padding-top: 0;
+  padding-bottom: 40%;
+}
+
+.lever.B {
+  padding-top: 40%;
+  padding-bottom: 0;
 }
 
 .robot.terminated {
