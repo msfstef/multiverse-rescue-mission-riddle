@@ -79,7 +79,7 @@ h1 {
 }
 
 .robot.terminated {
-  background:rgb(255, 125, 125)
+  background:rgb(155, 155, 155)
 }
 
 #view.terminated .scientist {
