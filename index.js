@@ -9,20 +9,20 @@ let TIMESTEP = 500;
 window.onload = async () => {
   const commands = document.getElementById('commands');
   const options = document.getElementById('options');
-  updateOptions();
+  updateParameters();
   options.addEventListener('change', (e) => {
-    updateOptions();
+    updateParameters();
     resetRiddle();
     runRiddle();
-  })
+  });
+  commands.addEventListener('change', (e) => updateParameters());
 
   runRiddle();
 };
 
-function updateOptions() {
-  const options = document.getElementById('options');
-  NUM_SCIENTISTS = options.querySelector('[name="numScientists"]').valueAsNumber;
-  TIMESTEP = options.querySelector('[name="timestep"]').valueAsNumber;
+function updateParameters() {
+  NUM_SCIENTISTS = document.querySelector('[name="numScientists"]').valueAsNumber;
+  TIMESTEP = document.querySelector('[name="timestep"]').valueAsNumber;
 }
 
 async function runRiddle() {
@@ -215,7 +215,7 @@ class Accountant extends Scientist {
         // if receiving signal B, then count it as a visit signal
         // and increase the visit count
         this.numSignalsReceived_++;
-        
+
         if (this.checkEveryoneHasBeenVisited()) {
           robot.pressButton();
         } else {
