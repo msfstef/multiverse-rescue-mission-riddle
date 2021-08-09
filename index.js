@@ -143,6 +143,15 @@ class Scientist {
     this.element = element;
     this.sentVisitedSignal_ = false;
     this.visited_ = false;
+    this.visitedElement_ = document.createElement('div');
+    this.visitedElement_.classList.add('visitedLabel');
+    this.visitedElement_.innerText = 'Unvisited';
+    element.appendChild(this.visitedElement_);
+
+    this.sentSignalElement_ = document.createElement('div');
+    this.sentSignalElement_.classList.add('sentSignalLabel');
+    this.sentSignalElement_.innerText = '';
+    element.appendChild(this.sentSignalElement_);
   }
 
   isVisited() {
@@ -152,21 +161,19 @@ class Scientist {
   setToVisited() {
     this.visited_ = true;
     this.element.classList.add('visited');
+    this.visitedElement_.innerText = 'Visited';
   }
 
   handleVisit(robot) {
-    if (!this.isVisited()) {
-      this.setToVisited();
-    }
-
     const signal = leversToSignal(robot.leftLever, robot.rightLever);
     switch (signal) {
       case SIGNAL_A:
         if (!this.sentVisitedSignal_) {
           this.sentVisitedSignal_ = true;
-          robot.pullRightLever();
-        } else {
+          this.sentSignalElement_.innerText = 'Sent signal';
           robot.pullLeftLever();
+        } else {
+          robot.pullRightLever();
         }
         break;
       
@@ -178,6 +185,10 @@ class Scientist {
         console.warn('Received invalid signal:', signal);
         break;
     }
+
+    if (!this.isVisited()) {
+      this.setToVisited();
+    }
   }
 }
 
@@ -187,20 +198,23 @@ class Accountant extends Scientist {
     element.classList.add('accountant');
     this.numScientists_ = numScientists;
     this.numSignalsReceived_ = 0;
+
+    this.signalCountElement_ = document.createElement('div');
+    this.signalCountElement_.classList.add('signalCount');
+    this.signalCountElement_.innerText = `Signal Count: ${this.numSignalsReceived_}`;
+    element.appendChild(this.signalCountElement_);
   }
 
   checkEveryoneHasBeenVisited() {
     return this.numSignalsReceived_ === this.numScientists_;
   }
 
-  handleVisit(robot) {
-    // if the accountant has not been visited before, count one
-    // signal received form themselves
-    if (!this.isVisited()) {
-      this.numSignalsReceived_++;
-      this.setToVisited();
-    }
+  countSignal() {
+    this.numSignalsReceived_++;
+    this.signalCountElement_.innerText = `Signal Count: ${this.numSignalsReceived_}`;
+  }
 
+  handleVisit(robot) {
     const signal = leversToSignal(robot.leftLever, robot.rightLever);
     switch (signal) {
       case SIGNAL_A:
@@ -214,7 +228,7 @@ class Accountant extends Scientist {
       case SIGNAL_B:
         // if receiving signal B, then count it as a visit signal
         // and increase the visit count
-        this.numSignalsReceived_++;
+        this.countSignal();
 
         if (this.checkEveryoneHasBeenVisited()) {
           robot.pressButton();
@@ -226,6 +240,14 @@ class Accountant extends Scientist {
       default:
         console.warn('Received invalid signal:', signal);
         break;
+    }
+
+    // if the accountant has not been visited before, count one
+    // signal received form themselves
+    if (!this.isVisited()) {
+      this.countSignal();
+      this.sentSignalElement_.innerText = 'Sent signal';
+      this.setToVisited();
     }
   }
 }
