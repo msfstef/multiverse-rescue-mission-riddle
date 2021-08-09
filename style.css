@@ -13,12 +13,20 @@ h1 {
   border-radius: 5px;
 }
 
+#main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 #controls {
   height: 60px;
   margin: 0 12px;
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
 }
 
 #options {
@@ -29,14 +37,19 @@ h1 {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  align-items: flex-start;
 }
 
 .scientist {
-  --margin: 4px;
-  width: calc(20vw - 2 * var(--margin));
-  height: calc(20vw - 2 * var(--margin));
-  margin: var(--margin);
+  width: 200px;
+  height: 200px;
+  margin: 4px;
+  box-sizing: content-box;
   background: rgb(206, 255, 249);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .scientist.visited {
@@ -53,8 +66,8 @@ h1 {
 
 
 .robot {
-  width: 10vw;
-  height: 10vw;
+  width: 100px;
+  height: 100px;
   background: rgb(224, 224, 224);
   
   display: flex;
