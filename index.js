@@ -16,6 +16,10 @@ window.onload = async () => {
     runRiddle();
   });
   commands.addEventListener('change', (e) => updateParameters());
+  commands.querySelector('[name="restart"]').addEventListener('click', () => {
+    resetRiddle();
+    runRiddle();
+  })
 
   runRiddle();
 };
@@ -42,6 +46,12 @@ async function runRiddle() {
   // add the robot that will visit the scientists
   const robotElem = document.createElement('div');
   const robot = new Robot(robotElem, NUM_SCIENTISTS);
+
+  // add it for 2s to the view without visiting a scientist
+  // to illustrate robot before visiting
+  view.appendChild(robot.element);
+  await wait(2000);
+  view.removeChild(robot.element);
 
   while (!robot.terminated) {
     robot.visitDimension();
