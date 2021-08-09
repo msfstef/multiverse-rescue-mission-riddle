@@ -142,10 +142,23 @@ class Scientist {
     element.classList.add('scientist');
     this.element = element;
     this.sentVisitedSignal_ = false;
+    this.visited_ = false;
+  }
+
+  isVisited() {
+    return this.visited_;
+  }
+
+  setToVisited() {
+    this.visited_ = true;
+    this.element.classList.add('visited');
   }
 
   handleVisit(robot) {
-    this.element.classList.add('visited');
+    if (!this.isVisited()) {
+      this.setToVisited();
+    }
+
     const signal = leversToSignal(robot.leftLever, robot.rightLever);
     switch (signal) {
       case SIGNAL_A:
@@ -176,18 +189,34 @@ class Accountant extends Scientist {
     this.numSignalsReceived_ = 0;
   }
 
+  checkEveryoneHasBeenVisited() {
+    return this.numSignalsReceived_ === this.numScientists_;
+  }
+
   handleVisit(robot) {
-    this.element.classList.add('visited');
+    // if the accountant has not been visited before, count one
+    // signal received form themselves
+    if (!this.isVisited()) {
+      this.numSignalsReceived_++;
+      this.setToVisited();
+    }
+
     const signal = leversToSignal(robot.leftLever, robot.rightLever);
     switch (signal) {
       case SIGNAL_A:
-        robot.pullRightLever();
+        if (this.checkEveryoneHasBeenVisited()) {
+          robot.pressButton();
+        } else {
+          robot.pullRightLever();
+        }
         break;
       
       case SIGNAL_B:
+        // if receiving signal B, then count it as a visit signal
+        // and increase the visit count
         this.numSignalsReceived_++;
-
-        if (this.numSignalsReceived_ === this.numScientists_ - 1) {
+        
+        if (this.checkEveryoneHasBeenVisited()) {
           robot.pressButton();
         } else {
           robot.pullLeftLever();
